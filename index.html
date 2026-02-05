@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="BVER — Define the domain. BVER builds the system." />
   <title>BVER — Define the domain. BVER builds the system.</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="logo.png" />
   <style>
     :root {
       --bg: #0b0d12;
@@ -47,11 +49,11 @@
     }
     .logo {
       width: 42px; height: 42px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(125,211,252,0.25), rgba(167,243,208,0.18));
+      background: transparent;
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      display: grid; place-items: center;
-      font-weight: 800; letter-spacing: 0.06em;
+      display: block;
+      object-fit: contain;
     }
     .brand h1 { font-size: 16px; margin: 0; letter-spacing: 0.02em; }
     .brand p { margin: 0; font-size: 12px; color: var(--muted); }
@@ -213,7 +215,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo">B</div>
+        <img class="logo" src="logo.png" alt="BVER logo" width="42" height="42" />
         <div>
           <h1>BVER</h1>
           <p>Define the domain. BVER builds the system.</p>
