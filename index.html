@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="BVER — Define the domain. BVER builds the system." />
+  <title>BVER — Define the domain. BVER builds the system.</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.04);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --faint: rgba(255,255,255,0.50);
+      --border: rgba(255,255,255,0.12);
+      --accent: #7dd3fc;   /* sky */
+      --accent2: #a7f3d0;  /* mint */
+      --warn: #fbbf24;
+      --max: 1040px;
+      --radius: 18px;
+      --shadow: 0 12px 40px rgba(0,0,0,0.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% 10%, rgba(125,211,252,0.18), transparent 60%),
+        radial-gradient(900px 700px at 85% 20%, rgba(167,243,208,0.14), transparent 55%),
+        radial-gradient(1000px 700px at 30% 90%, rgba(99,102,241,0.10), transparent 55%),
+        var(--bg);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 28px 18px 60px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 2px 18px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo {
+      width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(125,211,252,0.25), rgba(167,243,208,0.18));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: grid; place-items: center;
+      font-weight: 800; letter-spacing: 0.06em;
+    }
+    .brand h1 { font-size: 16px; margin: 0; letter-spacing: 0.02em; }
+    .brand p { margin: 0; font-size: 12px; color: var(--muted); }
+    nav { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .pill:hover { background: rgba(255,255,255,0.07); text-decoration: none; }
+
+    .hero {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero:before {
+      content: "";
+      position: absolute; inset: -2px;
+      background: radial-gradient(600px 220px at 35% 0%, rgba(125,211,252,0.12), transparent 60%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      align-items: start;
+      position: relative;
+    }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .kicker {
+      display: inline-flex; gap: 8px; align-items: center;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.20);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(125,211,252,0.18);
+    }
+    .hero h2 {
+      margin: 14px 0 10px;
+      font-size: 44px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    @media (max-width: 560px) {
+      .hero h2 { font-size: 34px; }
+    }
+    .hero p {
+      margin: 0 0 16px;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+    .cta {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .btn {
+      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(125,211,252,0.25), rgba(167,243,208,0.18));
+      border-color: rgba(125,211,252,0.26);
+    }
+    .btn:hover { background: rgba(255,255,255,0.09); text-decoration: none; }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,0.18);
+      padding: 16px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 14px; letter-spacing: 0.02em; }
+    .code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.86);
+      white-space: pre;
+      overflow-x: auto;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.35);
+    }
+    .grid {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .grid .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .grid .card ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+    .grid .card li { margin: 6px 0; }
+
+    .section {
+      margin-top: 26px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius);
+      padding: 18px 18px 8px;
+    }
+    .section h3 { margin: 0 0 10px; font-size: 15px; }
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding-bottom: 14px;
+    }
+    @media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+    footer {
+      margin-top: 26px;
+      color: var(--faint);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 4px;
+    }
+    .muted { color: var(--muted); }
+    .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.18);
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <h1>BVER</h1>
+          <p>Define the domain. BVER builds the system.</p>
+        </div>
+      </div>
+
+      <nav>
+        <!-- Replace with your real links -->
+        <a class="pill" href="https://github.com/YOUR_ORG_HERE">GitHub</a>
+        <a class="pill" href="https://pypi.org/project/bver-runtime/">PyPI</a>
+        <a class="pill" href="#docs">Docs</a>
+        <a class="pill" href="#roadmap">Roadmap</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="kicker"><span class="dot"></span><span>Open runtime • Portable sandbox • Adapter ecosystem</span></div>
+            <h2>Build backends by defining the domain.</h2>
+            <p>
+              BVER is a domain-first runtime for building services and platforms.
+              You define <strong>References</strong>, <strong>Jobs</strong>, and <strong>Orchestrators</strong>.
+              BVER generates consistent APIs, execution wiring, validation, and tooling—so you can focus on the domain.
+            </p>
+
+            <div class="cta">
+              <a class="btn primary" href="#quickstart">Quickstart</a>
+              <a class="btn" href="#concepts">Core concepts</a>
+              <a class="btn" href="#sandbox">Sandbox</a>
+            </div>
+
+            <p class="muted" style="margin-top: 14px;">
+              <span class="tag">Pointer-based addressing</span>
+              <span class="tag">REST + MCP ops</span>
+              <span class="tag">SSE live updates</span>
+              <span class="tag">Adapters</span>
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Example: reference pointers</h3>
+            <div class="code">bver://sites/site/123
+bver://sites/site/123@name
+bver://drawings/drawing/456@meta.sheet_number</div>
+
+            <h3 style="margin-top: 14px;">What BVER builds</h3>
+            <div class="code">refs.site.get
+refs.site.list
+refs.site.create
+refs.site.patch
+jobs.reindex.start
+orch.design_site.start</div>
+          </div>
+        </div>
+
+        <div class="grid" id="concepts">
+          <div class="card">
+            <h3>References</h3>
+            <p>Persistent domain objects owned by a service. Versioned changes, diffs, and triggers are first-class.</p>
+            <ul>
+              <li>CRUD and list operations</li>
+              <li>Version history + diff</li>
+              <li>Optional dynamic kinds</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Jobs</h3>
+            <p>Deterministic compute tasks. Tracked execution with status, retries, and emitted events.</p>
+            <ul>
+              <li>Celery-backed execution</li>
+              <li>Status persistence</li>
+              <li>Uniform operation surface</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Orchestrators</h3>
+            <p>Multi-step workflows that compose operations across services—without breaking ownership boundaries.</p>
+            <ul>
+              <li>Cross-service composition</li>
+              <li>Event-driven automation</li>
+              <li>Pointer-based resolution</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="quickstart">
+        <h3>Quickstart</h3>
+        <div class="two">
+          <div class="card">
+            <h3>Install runtime</h3>
+            <div class="code">pip install bver-runtime</div>
+            <p class="muted" style="margin-top: 8px;">
+              Runtime libraries are permissively licensed and designed for broad reuse.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Install sandbox + CLI</h3>
+            <div class="code"># recommended (isolated installs)
+pipx install bver-sandbox
+pipx install bver-app-cli
+
+# run daemon
+bver-sandboxd
+
+# use CLI
+bver config show
+bver cluster start</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sandbox">
+        <h3>Sandbox</h3>
+        <div class="two">
+          <div class="card">
+            <h3>What it does</h3>
+            <ul>
+              <li>Validates service manifests and cross-service pointer contracts</li>
+              <li>Streams live build/run logs via SSE</li>
+              <li>Manages local cluster lifecycle (compose, restart, diagnostics)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Design goals</h3>
+            <ul>
+              <li>Local-first: install and run on a single VM or workstation</li>
+              <li>Thin clients: CLI + VS Code plugin + optional web UI</li>
+              <li>Strict boundaries: cross-service references are pointers, not embedded objects</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="docs">
+        <h3>Documentation</h3>
+        <div class="two">
+          <div class="card">
+            <h3>Core docs</h3>
+            <ul>
+              <li><a href="#">Concepts: References, Jobs, Orchestrators</a></li>
+              <li><a href="#">ReferencePointers & AttributePaths</a></li>
+              <li><a href="#">Manifests & validation</a></li>
+              <li><a href="#">Adapters: storage, messaging, search</a></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Repos</h3>
+            <ul>
+              <li><a href="https://github.com/YOUR_ORG_HERE/bver-runtime">bver-runtime</a></li>
+              <li><a href="https://github.com/YOUR_ORG_HERE/bver-sandbox">bver-sandbox</a></li>
+              <li><a href="https://github.com/YOUR_ORG_HERE/bver-app-cli">bver-app-cli</a></li>
+              <li><a href="https://github.com/YOUR_ORG_HERE/bver-adapters">bver-adapters</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="roadmap">
+        <h3>Roadmap (near-term)</h3>
+        <div class="two">
+          <div class="card">
+            <h3>v0.1</h3>
+            <ul>
+              <li>Sandbox daemon: config, repo scan, cluster start/stop, restart service</li>
+              <li>SSE streaming runs + logs</li>
+              <li>CLI parity for all daemon functions</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>v0.2+</h3>
+            <ul>
+              <li>Pointer validation: service/repo/path checks against manifests</li>
+              <li>Manifest aggregation + cluster-wide diagnostics (refs/jobs)</li>
+              <li>Optional binaries / deb/rpm packages for easy installs</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div>
+          <span class="muted">©</span> <span id="year"></span> BVER • Built for domain-first systems
+        </div>
+        <div class="muted">
+          <a href="mailto:hello@bver.dev">hello@bver.dev</a> ·
+          <a href="mailto:security@bver.dev">security@bver.dev</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
