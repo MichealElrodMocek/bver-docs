@@ -3,27 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="BVER — Define the domain. BVER builds the system." />
-  <title>BVER — Define the domain. BVER builds the system.</title>
+  <meta name="description" content="BVER - Local-first platform + plugin ecosystem for on-prem sandbox deployments." />
+  <title>BVER - Local-first platform + plugins</title>
   <link rel="icon" href="logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="logo.png" />
   <style>
     :root {
-      --bg: #0b0d12;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.04);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.68);
-      --faint: rgba(255,255,255,0.50);
-      --border: rgba(255,255,255,0.12);
-      --accent: #7dd3fc;   /* sky */
-      --accent2: #a7f3d0;  /* mint */
-      --warn: #fbbf24;
+      --bg: #f6f1e6;
+      --panel: rgba(255,255,255,0.76);
+      --panel2: rgba(255,255,255,0.58);
+      --text: rgba(20,22,26,0.92);
+      --muted: rgba(20,22,26,0.68);
+      --faint: rgba(20,22,26,0.50);
+      --border: rgba(20,22,26,0.12);
+      --accent: #0f766e;   /* teal */
+      --accent2: #b45309;  /* amber */
+      --warn: #b91c1c;
       --max: 1040px;
       --radius: 18px;
-      --shadow: 0 12px 40px rgba(0,0,0,0.45);
+      --shadow: 0 18px 60px rgba(8,12,16,0.16);
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --sans: "Avenir Next", Avenir, "Gill Sans", "Trebuchet MS", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
     }
     * { box-sizing: border-box; }
     body {
@@ -31,11 +32,20 @@
       font-family: var(--sans);
       color: var(--text);
       background:
-        radial-gradient(1200px 800px at 10% 10%, rgba(125,211,252,0.18), transparent 60%),
-        radial-gradient(900px 700px at 85% 20%, rgba(167,243,208,0.14), transparent 55%),
-        radial-gradient(1000px 700px at 30% 90%, rgba(99,102,241,0.10), transparent 55%),
+        radial-gradient(1100px 700px at 10% 0%, rgba(15,118,110,0.18), transparent 62%),
+        radial-gradient(900px 600px at 100% 15%, rgba(180,83,9,0.14), transparent 60%),
+        radial-gradient(900px 700px at 20% 100%, rgba(15,118,110,0.10), transparent 60%),
         var(--bg);
       min-height: 100vh;
+    }
+    body:before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.42;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
     }
     a { color: inherit; text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -62,10 +72,10 @@
       padding: 9px 12px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.40);
       font-size: 13px;
     }
-    .pill:hover { background: rgba(255,255,255,0.07); text-decoration: none; }
+    .pill:hover { background: rgba(255,255,255,0.60); text-decoration: none; }
 
     .hero {
       margin-top: 12px;
@@ -80,7 +90,7 @@
     .hero:before {
       content: "";
       position: absolute; inset: -2px;
-      background: radial-gradient(600px 220px at 35% 0%, rgba(125,211,252,0.12), transparent 60%);
+      background: radial-gradient(600px 220px at 35% 0%, rgba(15,118,110,0.12), transparent 60%);
       pointer-events: none;
     }
     .hero-grid {
@@ -96,7 +106,7 @@
     .kicker {
       display: inline-flex; gap: 8px; align-items: center;
       border: 1px solid var(--border);
-      background: rgba(0,0,0,0.20);
+      background: rgba(255,255,255,0.48);
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 12px;
@@ -105,13 +115,14 @@
     .dot {
       width: 8px; height: 8px; border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(125,211,252,0.18);
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.18);
     }
     .hero h2 {
       margin: 14px 0 10px;
       font-size: 44px;
       line-height: 1.05;
       letter-spacing: -0.02em;
+      font-family: var(--serif);
     }
     @media (max-width: 560px) {
       .hero h2 { font-size: 34px; }
@@ -130,21 +141,21 @@
       border-radius: 12px;
       padding: 10px 14px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.46);
       font-weight: 600;
       font-size: 14px;
       text-decoration: none;
     }
     .btn.primary {
-      background: linear-gradient(135deg, rgba(125,211,252,0.25), rgba(167,243,208,0.18));
-      border-color: rgba(125,211,252,0.26);
+      background: linear-gradient(135deg, rgba(15,118,110,0.20), rgba(180,83,9,0.14));
+      border-color: rgba(15,118,110,0.26);
     }
-    .btn:hover { background: rgba(255,255,255,0.09); text-decoration: none; }
+    .btn:hover { background: rgba(255,255,255,0.62); text-decoration: none; }
 
     .card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      background: rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.46);
       padding: 16px;
     }
     .card h3 { margin: 0 0 10px; font-size: 14px; letter-spacing: 0.02em; }
@@ -152,13 +163,13 @@
       font-family: var(--mono);
       font-size: 12.5px;
       line-height: 1.5;
-      color: rgba(255,255,255,0.86);
+      color: rgba(20,22,26,0.86);
       white-space: pre;
       overflow-x: auto;
       padding: 12px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(20,22,26,0.10);
+      background: rgba(255,255,255,0.70);
     }
     .grid {
       margin-top: 20px;
@@ -174,7 +185,7 @@
     .section {
       margin-top: 26px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.40);
       border-radius: var(--radius);
       padding: 18px 18px 8px;
     }
@@ -205,8 +216,21 @@
       padding: 4px 8px;
       border: 1px solid var(--border);
       border-radius: 999px;
-      background: rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.54);
       color: var(--muted);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; animation: rise 700ms ease forwards; }
+    .d1 { animation-delay: 60ms; }
+    .d2 { animation-delay: 140ms; }
+    .d3 { animation-delay: 220ms; }
+    .d4 { animation-delay: 300ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; animation: none; }
     }
   </style>
 </head>
@@ -218,181 +242,212 @@
         <img class="logo" src="logo.png" alt="BVER logo" width="42" height="42" />
         <div>
           <h1>BVER</h1>
-          <p>Define the domain. BVER builds the system.</p>
+          <p>Local-first platform + plugins for on-prem sandbox deployments.</p>
         </div>
       </div>
 
       <nav>
-        <!-- Replace with your real links -->
-        <a class="pill" href="https://github.com/YOUR_ORG_HERE">GitHub</a>
-        <a class="pill" href="https://pypi.org/project/bver-runtime/">PyPI</a>
         <a class="pill" href="#docs">Docs</a>
-        <a class="pill" href="#roadmap">Roadmap</a>
+        <a class="pill" href="#plugins">Plugins</a>
+        <a class="pill" href="#system">System layout</a>
+        <a class="pill" href="#roadmap">MVP scope</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero">
+      <section class="hero reveal d1">
         <div class="hero-grid">
           <div>
-            <div class="kicker"><span class="dot"></span><span>Open runtime • Portable sandbox • Adapter ecosystem</span></div>
-            <h2>Build backends by defining the domain.</h2>
+            <div class="kicker"><span class="dot"></span><span>On-prem Sandbox | Local plugins | Contracted capabilities</span></div>
+            <h2>Frame the platform. Then ship plugins.</h2>
             <p>
-              BVER is a domain-first runtime for building services and platforms.
-              You define <strong>References</strong>, <strong>Jobs</strong>, and <strong>Orchestrators</strong>.
-              BVER generates consistent APIs, execution wiring, validation, and tooling—so you can focus on the domain.
+              BVER is a local-first runtime + plugin ecosystem for engineering platforms.
+              Start with an on-prem Sandbox deployment, define your <strong>domain objects</strong> and <strong>automations</strong>,
+              then compose capabilities via <strong>plugins</strong> (simulators, adapters, transmitters, solvers, and orchestrators).
             </p>
 
             <div class="cta">
               <a class="btn primary" href="#quickstart">Quickstart</a>
-              <a class="btn" href="#concepts">Core concepts</a>
-              <a class="btn" href="#sandbox">Sandbox</a>
+              <a class="btn" href="#plugins">Plugin ecosystem</a>
+              <a class="btn" href="#system">System layout</a>
             </div>
 
             <p class="muted" style="margin-top: 14px;">
-              <span class="tag">Pointer-based addressing</span>
-              <span class="tag">REST + MCP ops</span>
-              <span class="tag">SSE live updates</span>
-              <span class="tag">Adapters</span>
+              <span class="tag">On-prem first</span>
+              <span class="tag">Capability contracts</span>
+              <span class="tag">Local packaging</span>
+              <span class="tag">Deterministic jobs</span>
             </p>
           </div>
 
-          <div class="card">
-            <h3>Example: reference pointers</h3>
-            <div class="code">bver://sites/site/123
-bver://sites/site/123@name
-bver://drawings/drawing/456@meta.sheet_number</div>
+          <div class="card reveal d2">
+            <h3>MVP workflow (local)</h3>
+            <div class="code"># 1) start sandbox
+bver-sandbox up
 
-            <h3 style="margin-top: 14px;">What BVER builds</h3>
-            <div class="code">refs.site.get
-refs.site.list
-refs.site.create
-refs.site.patch
-jobs.reindex.start
-orch.design_site.start</div>
+# 2) register core app + plugins
+bver plugin add ./plugins/bver-adapter-msal
+bver plugin add ./plugins/bver-sim-loadflow
+
+# 3) run an orchestrated workflow
+bver run orch.substation_design --site bver://site/123</div>
+            <p class="muted" style="margin: 10px 0 0;">
+              No cloud dependencies assumed. Everything runs inside your local cluster.
+            </p>
           </div>
         </div>
 
         <div class="grid" id="concepts">
           <div class="card">
-            <h3>References</h3>
-            <p>Persistent domain objects owned by a service. Versioned changes, diffs, and triggers are first-class.</p>
+            <h3>Domain objects</h3>
+            <p>Persistent base objects + domain kinds. Your core repo owns identity and semantics.</p>
             <ul>
-              <li>CRUD and list operations</li>
-              <li>Version history + diff</li>
-              <li>Optional dynamic kinds</li>
+              <li>Stable vocabulary and kinds</li>
+              <li>Versioning + migrations</li>
+              <li>Compatibility contracts</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Jobs</h3>
-            <p>Deterministic compute tasks. Tracked execution with status, retries, and emitted events.</p>
+            <h3>Automations</h3>
+            <p>Triggers, gates, and scheduled workflows that turn platform events into actions.</p>
             <ul>
-              <li>Celery-backed execution</li>
-              <li>Status persistence</li>
-              <li>Uniform operation surface</li>
+              <li>Event-driven triggers</li>
+              <li>Deterministic jobs + retries</li>
+              <li>Audit-friendly execution</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Orchestrators</h3>
-            <p>Multi-step workflows that compose operations across services—without breaking ownership boundaries.</p>
+            <h3>Plugins</h3>
+            <p>Capabilities packaged independently. Discoverable, permissioned, and composable.</p>
             <ul>
-              <li>Cross-service composition</li>
-              <li>Event-driven automation</li>
-              <li>Pointer-based resolution</li>
+              <li>Local install + version pinning</li>
+              <li>Explicit input/output contracts</li>
+              <li>Composable orchestrators</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="section" id="quickstart">
-        <h3>Quickstart</h3>
+      <section class="section reveal d2" id="quickstart">
+        <h3>Quickstart (on-prem)</h3>
         <div class="two">
           <div class="card">
-            <h3>Install runtime</h3>
-            <div class="code">pip install bver-runtime</div>
+            <h3>Bring up the Sandbox</h3>
+            <div class="code">bver-sandbox up
+bver status</div>
+            <p class="muted" style="margin-top: 8px;">Goal: a local cluster that runs your core app + plugins.</p>
+          </div>
+          <div class="card">
+            <h3>Author a local plugin</h3>
+            <div class="code">bver plugin init bver-sim-loadflow
+bver plugin dev
+bver plugin test</div>
+            <p class="muted" style="margin-top: 8px;">Goal: ship a capability with a stable contract.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal d3" id="plugins">
+        <h3>Plugin ecosystem (MVP)</h3>
+        <div class="two">
+          <div class="card">
+            <h3>Canonical plugin types</h3>
+            <ul>
+              <li>Simulator: scoped simulation context -> result</li>
+              <li>Adapter: external <-> internal representations</li>
+              <li>Transmitter: irreversible external action</li>
+              <li>Retriever: pulls external data into platform</li>
+              <li>Generator/Solver: inputs -> solution objects</li>
+              <li>Perception pipeline: pluggable CNN/GNN-style stages</li>
+              <li>Orchestrator: gated multi-step workflows</li>
+              <li>Validator/Policy: constraints + compliance evidence</li>
+              <li>Enricher: adds metadata/context without identity changes</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Local plugin lifecycle</h3>
+            <ul>
+              <li>Install: `bver plugin add` from a path or package</li>
+              <li>Pin: explicit versions in a local lockfile</li>
+              <li>Run: capabilities exposed to the runtime by contract</li>
+              <li>Audit: every run emits consistent logs + artifacts</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal d3" id="system">
+        <h3>Standard BVER system layout</h3>
+        <div class="two">
+          <div class="card">
+            <h3>Core repo (your app)</h3>
+            <ul>
+              <li>Domain objects + kinds + migrations</li>
+              <li>Automations, triggers, and policies</li>
+              <li>Orchestrators that compose plugin capabilities</li>
+              <li>Local environment + deployment topology</li>
+            </ul>
             <p class="muted" style="margin-top: 8px;">
-              Runtime libraries are permissively licensed and designed for broad reuse.
+              Recommended: one primary repo that defines the vocabulary and owns identity.
             </p>
           </div>
           <div class="card">
-            <h3>Install sandbox + CLI</h3>
-            <div class="code"># recommended (isolated installs)
-pipx install bver-sandbox
-pipx install bver-app-cli
-
-# run daemon
-bver-sandboxd
-
-# use CLI
-bver config show
-bver cluster start</div>
+            <h3>Plugin repos (capabilities)</h3>
+            <ul>
+              <li>Group by functional directive: simulators, solvers, orchestrations</li>
+              <li>Group adapters by provider: e.g., "all MSAL services" together</li>
+              <li>Ship contracts + tests + minimal runtime glue</li>
+              <li>Stay replaceable: no core-domain ownership</li>
+            </ul>
+            <p class="muted" style="margin-top: 8px;">
+              See <a href="BVER_SYSTEM_LAYOUT.md">BVER_SYSTEM_LAYOUT.md</a> for a concrete repo tree.
+            </p>
           </div>
         </div>
       </section>
 
-      <section class="section" id="sandbox">
-        <h3>Sandbox</h3>
-        <div class="two">
-          <div class="card">
-            <h3>What it does</h3>
-            <ul>
-              <li>Validates service manifests and cross-service pointer contracts</li>
-              <li>Streams live build/run logs via SSE</li>
-              <li>Manages local cluster lifecycle (compose, restart, diagnostics)</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Design goals</h3>
-            <ul>
-              <li>Local-first: install and run on a single VM or workstation</li>
-              <li>Thin clients: CLI + VS Code plugin + optional web UI</li>
-              <li>Strict boundaries: cross-service references are pointers, not embedded objects</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="docs">
+      <section class="section reveal d4" id="docs">
         <h3>Documentation</h3>
         <div class="two">
           <div class="card">
             <h3>Core docs</h3>
             <ul>
-              <li><a href="#">Concepts: References, Jobs, Orchestrators</a></li>
-              <li><a href="#">ReferencePointers & AttributePaths</a></li>
-              <li><a href="#">Manifests & validation</a></li>
-              <li><a href="#">Adapters: storage, messaging, search</a></li>
+              <li><a href="BVER_PLATFORM.md">BVER_PLATFORM.md</a></li>
+              <li><a href="BVER_RUNTIME.md">BVER_RUNTIME.md</a></li>
+              <li><a href="BVER_SANDBOX_AND_CLI.md">BVER_SANDBOX_AND_CLI.md</a></li>
+              <li><a href="BVER_ADAPTERS.md">BVER_ADAPTERS.md</a></li>
+              <li><a href="BVER_SYSTEM_LAYOUT.md">BVER_SYSTEM_LAYOUT.md</a></li>
             </ul>
           </div>
           <div class="card">
-            <h3>Repos</h3>
+            <h3>MVP page goals</h3>
             <ul>
-              <li><a href="https://github.com/YOUR_ORG_HERE/bver-runtime">bver-runtime</a></li>
-              <li><a href="https://github.com/YOUR_ORG_HERE/bver-sandbox">bver-sandbox</a></li>
-              <li><a href="https://github.com/YOUR_ORG_HERE/bver-app-cli">bver-app-cli</a></li>
-              <li><a href="https://github.com/YOUR_ORG_HERE/bver-adapters">bver-adapters</a></li>
+              <li>Assume on-prem Sandbox deployment</li>
+              <li>Make plugin authoring the default path</li>
+              <li>Keep cloud details out of the narrative for now</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="section" id="roadmap">
-        <h3>Roadmap (near-term)</h3>
+      <section class="section reveal d4" id="roadmap">
+        <h3>MVP scope (near-term)</h3>
         <div class="two">
           <div class="card">
-            <h3>v0.1</h3>
+            <h3>Must-have</h3>
             <ul>
-              <li>Sandbox daemon: config, repo scan, cluster start/stop, restart service</li>
-              <li>SSE streaming runs + logs</li>
-              <li>CLI parity for all daemon functions</li>
+              <li>On-prem Sandbox boot + health checks</li>
+              <li>Local plugin add/remove + version pinning</li>
+              <li>Run capabilities with consistent logs/artifacts</li>
+              <li>Basic permissions + outbound network policy</li>
             </ul>
           </div>
           <div class="card">
-            <h3>v0.2+</h3>
+            <h3>Nice-to-have</h3>
             <ul>
-              <li>Pointer validation: service/repo/path checks against manifests</li>
-              <li>Manifest aggregation + cluster-wide diagnostics (refs/jobs)</li>
-              <li>Optional binaries / deb/rpm packages for easy installs</li>
+              <li>UI for local plugin discovery and runs</li>
+              <li>Schema/contract diffs and compatibility checks</li>
+              <li>Golden-path templates for each plugin type</li>
             </ul>
           </div>
         </div>
@@ -400,10 +455,10 @@ bver cluster start</div>
 
       <footer>
         <div>
-          <span class="muted">©</span> <span id="year"></span> BVER • Built for domain-first systems
+          <span class="muted">&copy;</span> <span id="year"></span> BVER | Built for domain-first systems
         </div>
         <div class="muted">
-          <a href="mailto:hello@bver.dev">hello@bver.dev</a> ·
+          <a href="mailto:hello@bver.dev">hello@bver.dev</a> |
           <a href="mailto:security@bver.dev">security@bver.dev</a>
         </div>
       </footer>
