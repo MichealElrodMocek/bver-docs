@@ -9,7 +9,7 @@ Audience: Platform developers, plugin authors, early adopters
 BVER is a domain‑first platform for building, extending, and connecting engineering systems.
 
 It provides:
-	•	A runtime kernel for hosting domain services
+	•	A runtime kernel for hosting a domain application and its plugins
 	•	A capability‑oriented plugin ecosystem
 	•	A shared data mesh for cross‑domain integration
 	•	A control plane for governance, identity, and lifecycle management
@@ -122,7 +122,7 @@ Extending the vocabulary (plugins included)
 - The core app repo typically defines the canonical base object set for a system.
 - Plugins may introduce additional base objects and kinds to add capability, as long as:
 	•	The base object type identifier is globally unique (namespaced)
-	•	The owning service is explicit (core app service or plugin service)
+	•	The owning package is explicit (core app or a plugin)
 	•	The object is registered so other plugins can discover it (capability + contract registries)
 	•	Storage evolution follows the migration policy (diff, plan, prompt on destructive changes)
 
@@ -389,7 +389,7 @@ SDKs are products of the platform, not hand-written libraries.
 These systems apply everywhere:
 
 Identity & Entitlements
-	•	Users, services, plugins
+	•	Users, apps, plugins
 	•	Role‑based and policy‑based access
 
 Registries

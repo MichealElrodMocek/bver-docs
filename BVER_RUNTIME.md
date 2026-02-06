@@ -4,7 +4,7 @@
 
 BVER Runtime is a domain-native execution engine that compiles domain definitions into fully operational backend systems.
 
-Developers define domain primitives such as references, jobs, orchestrators, and contracts. BVER constructs the execution system, APIs, orchestration environment, and cross-service addressing automatically.
+Developers define domain primitives such as references, jobs, orchestrators, and contracts. BVER constructs the execution system, APIs, orchestration environment, and pointer-based addressing automatically.
 
 BVER Runtime provides:
 
@@ -12,7 +12,7 @@ BVER Runtime provides:
 - Reference storage and versioning integration
 - Job and orchestrator execution engines
 - Event emission and trigger integration
-- Cross-service reference resolution
+- Reference resolution (local-first)
 - Pointer-based universal addressing
 - Auth scope enforcement
 - Contract and manifest generation
@@ -25,7 +25,7 @@ The runtime is the execution substrate of the platform.
 
 Traditional systems are built infrastructure-first:
 
-    infrastructure → services → endpoints → logic → domain
+    infrastructure → plumbing → endpoints → logic → domain
 
 BVER is built domain-first:
 
@@ -39,7 +39,7 @@ The domain defines the system. Infrastructure is a runtime detail.
 
 ## References
 
-References are persistent domain objects managed by a service.
+References are persistent domain objects managed by a platform application (and its installed plugins).
 
 Examples:
 
@@ -58,7 +58,7 @@ References define:
 - auth policies
 - trigger emission
 
-References are always owned by exactly one service.
+References are always owned by exactly one owner (core app or a plugin).
 
 References are versioned. Every mutation produces:
 
@@ -66,7 +66,7 @@ References are versioned. Every mutation produces:
 - diff record
 - trigger event
 
-References never cross service boundaries as objects. Only pointers cross boundaries.
+References are never "passed around" as embedded objects between capabilities. Capabilities exchange pointers and contracted DTO payloads, and the runtime resolves pointers as needed.
 
 ---
 
@@ -100,9 +100,33 @@ Jobs are exposed automatically as operations.
 
 ---
 
+## Reference Locking (Leases) for Robust Jobs
+
+Jobs should not directly receive embedded reference objects. They should receive pointers, and the runtime resolves references when needed.
+
+To keep the system stable under concurrency, the runtime should support reference locking for writes:
+- When a job starts, it can request a write lease on one or more reference pointers.
+- While the lease is held, other mutations to those references are blocked (or forced into a conflict path) until the job completes, fails, or is terminated.
+- Leases have timeouts/heartbeats so a crashed worker does not lock the system forever.
+
+Recommended pattern (Celery/RabbitMQ or similar runners)
+- Submit job with reference pointers only.
+- Worker begins job -> acquire write lease(s) for the pointers it will mutate.
+- Perform work with resolved references.
+- Commit mutations -> release lease(s).
+- On failure/termination -> release lease(s) (or let them expire).
+
+Configurable healing behavior (optional)
+- On write conflict: either fail fast, retry with backoff, or "restart on write" (re-run the job when the references become writable again).
+- On lease loss/timeout: treat as cancellation and emit an audit event.
+
+This makes "who is allowed to write right now" a runtime concern, not something plugin authors have to reinvent.
+
+---
+
 ## Orchestrators
 
-Orchestrators are dynamic workflows that coordinate operations across services.
+Orchestrators are dynamic workflows that coordinate operations across capabilities (core app code + plugins).
 
 Orchestrators:
 
@@ -112,9 +136,7 @@ Orchestrators:
 - emit events
 - respond to triggers
 
-Orchestrators are the primary mechanism for cross-service system composition.
-
-Services own their data. Orchestrators compose across services.
+Orchestrators are the primary mechanism for system composition inside a single BVER platform.
 
 ---
 
@@ -147,7 +169,7 @@ ReferencePointers are the universal addressing mechanism in BVER.
 
 ReferencePointer canonical form:
 
-    bver://{service}/{repo}/{id}@{attribute_path}
+    bver://{namespace}/{repo}/{id}@{attribute_path}
 
 Examples:
 
@@ -167,7 +189,7 @@ AttributePaths use human-readable dotted syntax:
     meta.owner.name
     terminals[0].label
 
-ReferencePointers allow dynamic resolution across service boundaries.
+ReferencePointers allow dynamic resolution without the designer thinking about networking or infrastructure.
 
 ReferencePointers are first-class platform primitives.
 
@@ -180,8 +202,8 @@ Pointer resolution is performed by the runtime resolver.
 Resolution process:
 
 1. Parse pointer
-2. Identify owning service
-3. Resolve locally or via adapter
+2. Identify owning repo/owner
+3. Resolve locally or via adapter (storage, files, external systems)
 4. Fetch reference
 5. Apply attribute path
 6. Return value
@@ -192,41 +214,39 @@ Runtime interface:
     bver.resolve(pointer)
     bver.exists(pointer)
     bver.list(repo)
-    bver.listrefs(service)
+    bver.listrefs(namespace)
 
-Pointer resolution works across service boundaries transparently.
+Pointer resolution is a platform primitive; the runtime decides how/where the data is loaded.
 
 ---
 
-# Cross-Service Boundary Model
+# Composition and Boundaries (No Segmentation Required)
 
-BVER enforces strict service ownership boundaries.
+BVER does not require splitting the domain into separate networked components to stay sane.
 
 Rules:
 
-- References are owned by exactly one service
-- Foreign references are represented as pointers
-- Services do not embed foreign reference objects
-- Services do not mutate foreign reference state directly
-- Cross-service changes occur via operations
-- Orchestrators coordinate cross-service workflows
+- Each reference type has exactly one owner in the platform (core app or a plugin).
+- Capabilities operate via operations with explicit input/output contracts.
+- Use pointers to refer to references, not embedded reference snapshots.
+- Orchestrators compose capabilities and enforce gating/policy/audit.
 
-Pointers allow safe cross-service interaction without breaking service ownership.
+If an organization truly needs separate platforms, they run separate BVER platforms and connect them via EAGER subscriptions (not in-process imports or bespoke networking glue).
 
 ---
 
 # Shared Contracts
 
-Cross-service data contracts must use:
+Cross-plugin (and cross-platform) data contracts should use:
 
 - BVER core types (RefPtr, AttributePointer, JobHandle, etc)
 - Shared contract types from a shared package
 
-Shared packages define stable cross-service payload types.
+Shared packages define stable payload types for composition.
 
 Shared packages are versioned and imported normally.
 
-Services must not import internal models from other services.
+Plugins should not import internal models from the core app (or other plugins). Use contracts and EAGER channels for sharing.
 
 ---
 
@@ -256,13 +276,13 @@ Figments define:
 - triggers
 - validation logic
 
-Figments allow reuse across services.
+Figments allow reuse across plugins and apps.
 
 ---
 
 # Manifest
 
-Each service produces:
+Each application bundle (core app and plugins) produces:
 
     bver.manifest.json
 
@@ -275,7 +295,7 @@ The manifest defines:
 - triggers
 - pointer resolution contracts
 
-Manifests define the service contract.
+Manifests define the capability contract.
 
 ---
 
@@ -299,6 +319,6 @@ BVER Runtime transforms domain definitions into operational systems.
 
 ReferencePointers provide universal addressing.
 
-Services own references. Orchestrators compose systems.
+Reference types have explicit owners. Orchestrators compose systems.
 
 The runtime builds the system automatically.

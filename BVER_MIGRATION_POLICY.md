@@ -71,7 +71,7 @@ Operational requirements
 Plugin considerations
 - Plugins may define their own base objects (reference types) and kinds to add capability to a platform.
 - A plugin-defined base object is still a base object: referenceable by default, versioned, auditable, and persisted via the same adapter abstraction.
-- Ownership is explicit: each base object type has exactly one owning service at runtime (core app or a plugin service).
+- Ownership is explicit: each base object type has exactly one owning package at runtime (core app or a plugin).
 - Collisions are not allowed: base object type identifiers must be globally unique (namespaced).
 
 Recommended UX (MVP)
@@ -81,4 +81,3 @@ Recommended UX (MVP)
 
 The guiding promise
 If you wake up tomorrow and decide an attribute on `Site` is misleading, you change the domain object first. BVER then plans the storage changes, shows you what would be lost, and only drops data after you explicitly confirm (or choose an export/archive/merge strategy).
-

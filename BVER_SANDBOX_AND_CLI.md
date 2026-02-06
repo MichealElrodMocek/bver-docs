@@ -4,7 +4,7 @@
 
 BVER Sandbox is the development and validation environment for BVER systems.
 
-Sandbox validates domain correctness, pointer resolution, service contracts, and runtime compatibility.
+Sandbox validates domain correctness, pointer resolution, capability contracts, and runtime compatibility.
 
 Sandbox enables building complex systems without infrastructure expertise.
 
@@ -14,10 +14,10 @@ Sandbox enables building complex systems without infrastructure expertise.
 
 Sandbox provides:
 
-- Service build validation
+- Bundle build validation (core app + plugins)
 - Manifest generation
 - Pointer contract validation
-- Cross-service contract validation
+- Cross-plugin contract validation
 - Runtime trial execution
 - Contract correctness enforcement
 
@@ -32,27 +32,26 @@ Sandbox validates ReferencePointers.
 Validation includes:
 
 - pointer syntax correctness
-- referenced service existence
-- referenced repo existence
+- referenced namespace/repo existence
 - attribute path validity
 - version qualifier validity
 
-Sandbox prevents invalid cross-service references.
+Sandbox prevents invalid references and contract drift.
 
 ---
 
-# Service Boundary Validation
+# Capability Boundary Validation
 
-Sandbox enforces cross-service boundary rules.
+Sandbox enforces boundary rules without requiring segmented networking or infrastructure concerns.
 
 Validation ensures:
 
-- services do not embed foreign reference objects
-- services use pointers for foreign references
-- operations only use allowed cross-service contract types
-- shared contract types are valid
+- plugins do not embed reference snapshots as nested objects in contracts
+- plugins use pointers and shared DTO contracts for referencing persisted objects
+- plugins do not import internal models from other plugins (or the core app)
+- shared contract types are valid and versioned
 
-Sandbox prevents illegal cross-service coupling.
+Sandbox prevents accidental tight coupling between plugins and the core app.
 
 ---
 
@@ -73,11 +72,11 @@ Canonical policy: `BVER_MIGRATION_POLICY.md`
 
 Sandbox supports:
 
-    bver sandbox trial <service>
+    bver sandbox trial <bundle>
 
 Trial execution performs:
 
-- build service
+- build bundle
 - generate manifest
 - validate contracts
 - validate pointers
@@ -97,7 +96,7 @@ Sandbox uses:
 
 Defines:
 
-- service registry
+- bundle registry (core app + plugins)
 - adapter endpoints
 - cluster configuration
 
@@ -112,7 +111,7 @@ Sandbox enables:
 - safe development
 - contract validation
 - pointer resolution testing
-- service integration testing
+- plugin integration testing
 
 Sandbox ensures system correctness.
 

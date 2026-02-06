@@ -76,11 +76,9 @@ Communication adapters:
 
 # Pointer Resolution via Adapters
 
-Adapters enable cross-service pointer resolution.
+Adapters help the runtime resolve pointers against storage backends and external systems.
 
-Adapters allow runtime to fetch references from external services.
-
-Adapters allow distributed system operation.
+Design goal: the domain designer should not have to think about networking, infrastructure, or where data lives.
 
 ---
 
@@ -100,4 +98,4 @@ Adapters connect runtime to infrastructure.
 
 Adapters preserve domain purity.
 
-Adapters enable distributed systems.
+Adapters make storage and integration pluggable.

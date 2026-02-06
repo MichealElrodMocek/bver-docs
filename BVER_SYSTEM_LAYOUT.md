@@ -27,7 +27,7 @@ The core repo owns:
 Clarification: base objects vs value structures
 - Base objects are referenceable by default (identity + lifecycle; can be pointed to, versioned, audited).
 - Value structures are not referenceable by default (pure data like `EmailAddress`, `Money`, `GeoPoint`), and typically live inside base objects or appear only in request/response payloads.
-- Plugins may define additional base objects and kinds to add capability; the owning service and type identifiers must be explicit and globally unique (namespaced).
+- Plugins may define additional base objects and kinds to add capability; the owning package and type identifiers must be explicit and globally unique (namespaced).
 
 Suggested name
 - bver-app-<product> (e.g., bver-app-substation)
@@ -80,8 +80,8 @@ Rule: plugins must still be buildable/testable in isolation (no deep imports acr
 
 2.1 Local cluster composition
 The on-prem Sandbox should be able to run:
-- Core app services (domain ownership + orchestrators + automations)
-- Plugin services (capabilities)
+- Core app bundle (domain ownership + orchestrators + automations)
+- Plugin bundles (capabilities)
 - Shared infra dependencies (DB, queues, object stores) as needed
 
 MVP expectations
