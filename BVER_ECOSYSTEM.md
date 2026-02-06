@@ -1,4 +1,4 @@
-BVER Platform – Unified Architecture Overview
+BVER Ecosystem – Unified Architecture Overview
 
 Version: 0.1.0
 Status: Draft (Foundational)
@@ -27,6 +27,7 @@ You build your domain, BVER builds your platform.
 	4.	Local‑First, Cloud‑Optional – Everything can run locally; cloud adds convenience
 	5.	Composable by Default – No monolith assumptions, no forced stack choices
 	6.	Storage‑Agnostic by Default – You evolve domain objects; BVER plans and applies safe migrations
+	7.	Tag‑Driven Segmentation – Large platforms can be split into services via domain tags, not manual networking
 
 Migration Policy (Canonical)
 Schema evolution is part of the developer experience, not an afterthought.
@@ -55,6 +56,39 @@ Output:
 
 ⸻
 
+3.1.1 BVER PLATFORM REPO (Core Domain Package)
+
+Purpose: The single source of truth for a platform's domain, UI, policies, and segmentation tags.
+
+What lives here:
+	•	PlatformDomain definitions (base objects, kinds, contracts)
+	•	Tags on objects/tools to guide compilation into services
+	•	Orchestrators, policies, automations, and UI layout (BVER GUI)
+	•	Platform metadata and deployment targets
+
+The compiler treats this repo as the core artifact and derives runtime bundles from it.
+
+⸻
+
+3.1.2 BVER DEPLOY (On-Prem Delivery App)
+
+Purpose: Final-mile deployment tool for on-prem production environments.
+
+Position in pipeline:
+	•	Sandbox builds and validates; Deploy delivers and operates production-grade installs
+	•	Sandbox can host a viable product, but Deploy targets enterprise reliability and ops hardening
+
+Responsibilities:
+	•	Install/upgrade runtime bundles and plugin packages on target environments
+	•	Enforce rollout policies (blue/green, canary, maintenance windows)
+	•	Handle backups, health checks, and rollback
+	•	Produce deployment reports and audit trails
+
+Note:
+	•	On-prem Sandbox can also publish to a hosted deployment platform (via Foundry) when desired
+
+⸻
+
 3.2 BVER COMPILER
 **Purpose:** Build, package, and publish BVER artifacts (local or CI)
 
@@ -62,6 +96,7 @@ Responsibilities:
 - Produces **runtime bundles**, **plugin packages**, **shim packages**, and **docs artifacts**
 - Validates manifests (capabilities, permissions, compatibility)
 - Generates schema diffs and migration plans from domain definitions
+- Builds a BVER DAM (`.bdam`) — a compiled graph of the entire platform
 - Runs codegen for SDKs and docs from registries
 - Signs artifacts (publisher provenance)
 
@@ -70,6 +105,7 @@ Outputs:
 - Plugin packages (Lodge)
 - Shim wheels (PyPI) for hosted plugins
 - SDK + docs bundles
+- BVER DAM (`.bdam`) compilation graph
 
 ---
 
@@ -114,6 +150,11 @@ Key characteristics:
 	•	Opinionated but minimal
 	•	No domain assumptions
 	•	Versioned API surface
+
+Runtime abstraction via compiler:
+	•	The compiler reads PlatformDomain + tags and maps the platform into runtime environments
+	•	Service boundaries are derived from tags, not hand-authored microservice configs
+	•	CI/CD can target only the affected services for recompilation and deployment
 
 ### Base Object Registry (Global Vocabulary)
 To avoid a world where every platform speaks a private language, BVER defines a small set of **global base objects** that represent “things that exist in the world.”
@@ -354,7 +395,47 @@ Control exists as:
 
 ⸻
 
-3.9 Web Applications (Next.js)
+3.10 BVER GUI + UI Kits (Platforms in a Package)
+
+Purpose: Define complete platform UIs from Python packages.
+
+Key ideas:
+	•	BVER packages are "platforms in a package": domain objects + workflows + UI layout
+	•	Python libraries define page layouts built from BVER widgets bound to domain objects
+	•	Plugins can ship widgets and semi-custom UI components in Python packages
+	•	The Node.js front end is built to a single spec and hydrates from backend config dynamically
+
+Scaffold (what this entails)
+	•	UI schema and layout DSL in Python (pages, sections, widgets, routes)
+	•	Widget registry with typed inputs/outputs and permission scopes
+	•	Bindings from widgets to domain objects via pointers and contracts
+	•	Theme tokens and design primitives separated from layout definitions
+	•	Validation pipeline: static checks for broken bindings and missing contracts
+	•	Artifact pipeline: compiled UI config shipped with the platform package
+	•	Runtime hydration: frontend loads config at boot and renders the platform dynamically
+	•	Plugin UI packs: plugins can ship widgets, views, and partial layouts
+
+Core libraries:
+	•	`bver-gui` (core widget primitives, layout engine, interaction contracts)
+	•	`bver-ui-kit` (default components + styling tokens; replaceable)
+	•	`bver-mobileapp` (mobile UI toolkit; targets Flutter)
+	•	`bver-desktopapp` (desktop UI toolkit)
+
+Builder extensions:
+	•	BVER Builder can generate web, mobile, and desktop shells from Python UI definitions
+	•	Mobile builds target Flutter, using generated config and widget bindings
+
+This keeps UI implementation errors low and lets authors focus on domain logic.
+
+Segmentation model (large scale)
+	•	Users define a `PlatformDomain` in Python and tag objects/tools with identifiers
+	•	The compiler analyzes tags to build the service map
+	•	Runtime environments are allocated per service map for scale and isolation
+	•	The result is a microservice architecture without authors managing networking
+
+⸻
+
+3.11 Web Applications (Next.js)
 
 Primary UIs:
 	•	Control Plane UI
@@ -368,7 +449,7 @@ The web apps are clients, not the platform itself.
 
 ⸻
 
-3.10 SDKs & Documentation Builder
+3.12 SDKs & Documentation Builder
 
 Generated from:
 	•	Runtime API definitions
@@ -381,6 +462,39 @@ Outputs:
 	•	Static documentation sites
 
 SDKs are products of the platform, not hand-written libraries.
+
+⸻
+
+3.13 BVER Ecosystem Repositories (GitHub)
+
+Core platform
+	•	`bver-platform` (PlatformDomain repo template; core app + domain + UI layout)
+	•	`bver-runtime` (execution kernel)
+	•	`bver-compiler` (builds artifacts and `.bdam`)
+	•	`bver-sandbox` (local dev + validation)
+	•	`bver-deploy` (on-prem delivery app)
+	•	`bver-cli` (developer/operator CLI)
+
+Data + governance
+	•	`bver-eager` (schema/DTO registry + change subscriptions)
+	•	`bver-control` (identity, governance, lifecycle)
+	•	`bver-lodge` (plugin registry/marketplace)
+	•	`bver-forge` (hosted execution fabric)
+	•	`bver-foundry` (hosted dev environments)
+
+UI toolkits
+	•	`bver-gui` (widget primitives + layout engine)
+	•	`bver-ui-kit` (default components + styling tokens)
+	•	`bver-mobileapp` (mobile UI toolkit; Flutter target)
+	•	`bver-desktopapp` (desktop UI toolkit)
+	•	`bver-builder` (generates web/mobile/desktop shells)
+
+Integrations + docs
+	•	`bver-adapters` (storage/messaging/identity adapters)
+	•	`bver-sdks` (generated SDKs + client stubs)
+	•	`bver-docs` (documentation and reference sites)
+
+Note: plugins live in separate repos per capability or provider (e.g., `bver-plugin-sim-loadflow`, `bver-plugin-adapter-msal`).
 
 ⸻
 
