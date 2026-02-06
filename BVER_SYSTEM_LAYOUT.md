@@ -24,6 +24,10 @@ The core repo owns:
 - Automations (triggers, policies, schedules)
 - Orchestrators (multi-step workflows that call plugin capabilities)
 
+Clarification: base objects vs value structures
+- Base objects are referenceable by default (identity + lifecycle; can be pointed to, versioned, audited).
+- Value structures are not referenceable by default (pure data like `EmailAddress`, `Money`, `GeoPoint`), and typically live inside base objects or appear only in request/response payloads.
+
 Suggested name
 - bver-app-<product> (e.g., bver-app-substation)
 
@@ -109,4 +113,3 @@ Put it in a plugin when:
 - It is optional or replaceable compute (simulation, solver, perception stage)
 - It is provider-specific integration (auth, API/SDK glue, file format normalization)
 - It pushes or pulls data across the platform boundary (transmitters/retrievers)
-

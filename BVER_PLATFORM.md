@@ -110,6 +110,23 @@ Key characteristics:
 ### Base Object Registry (Global Vocabulary)
 To avoid a world where every platform speaks a private language, BVER defines a small set of **global base objects** that represent “things that exist in the world.”
 
+### Base Objects vs Value Structures (Referenceability)
+BVER distinguishes between:
+
+- Base objects: referenceable by default
+	•	Represent entities with identity and lifecycle (something you can point at, version, and evolve)
+	•	Examples: `Site`, `Asset`, `Document`, `Drawing`, `Person`, `Organization`, `Material`
+	•	Base objects can be extended by domain kinds (`Site/Substation`, `Asset/Transformer`, etc.)
+
+- Value structures: not referenceable by default
+	•	Pure data representations with no standalone identity; typically embedded inside base objects or passed as inputs/outputs
+	•	Examples: `EmailAddress` (username + domain), `Money`, `GeoPoint`, `Duration`, `FileHash`
+	•	Value structures are created/updated only as part of a containing base object (or as request/response payloads)
+
+Rule of thumb:
+- If it should be globally addressable (pointer), versioned, audited, or independently permissioned -> it is (or belongs under) a base object
+- If it is just a piece of data describing something else -> it is a value structure
+
 Examples (illustrative):
 - `Site` (a place/location in the world)
 - `Asset` / `Equipment`
