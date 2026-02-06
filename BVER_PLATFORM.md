@@ -26,6 +26,7 @@ You build your domain, BVER builds your platform.
 	3.	Explicit Contracts – DTOs and schemas are versioned, governed, and discoverable
 	4.	Local‑First, Cloud‑Optional – Everything can run locally; cloud adds convenience
 	5.	Composable by Default – No monolith assumptions, no forced stack choices
+	6.	Storage‑Agnostic by Default – You evolve domain objects; BVER plans and applies safe migrations
 
 ⸻
 
@@ -39,6 +40,7 @@ Responsibilities:
 	•	Bootstraps local platform environments
 	•	Hosts dev instances of Runtime, EAGER, adapters
 	•	Provides CI/CD hooks and test scaffolding
+	•	Plans and applies migrations; can sweep for potential data loss (prompted)
 	•	Mirrors production topology where possible
 
 Output:
@@ -54,6 +56,7 @@ Output:
 Responsibilities:
 - Produces **runtime bundles**, **plugin packages**, **shim packages**, and **docs artifacts**
 - Validates manifests (capabilities, permissions, compatibility)
+- Generates schema diffs and migration plans from domain definitions
 - Runs codegen for SDKs and docs from registries
 - Signs artifacts (publisher provenance)
 
