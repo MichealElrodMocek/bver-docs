@@ -28,6 +28,11 @@ You build your domain, BVER builds your platform.
 	5.	Composable by Default – No monolith assumptions, no forced stack choices
 	6.	Storage‑Agnostic by Default – You evolve domain objects; BVER plans and applies safe migrations
 
+Migration Policy (Canonical)
+Schema evolution is part of the developer experience, not an afterthought.
+
+Canonical policy: `BVER_MIGRATION_POLICY.md`
+
 ⸻
 
 3. Platform Components (Canonical)
@@ -112,6 +117,14 @@ Key characteristics:
 
 ### Base Object Registry (Global Vocabulary)
 To avoid a world where every platform speaks a private language, BVER defines a small set of **global base objects** that represent “things that exist in the world.”
+
+Extending the vocabulary (plugins included)
+- The core app repo typically defines the canonical base object set for a system.
+- Plugins may introduce additional base objects and kinds to add capability, as long as:
+	•	The base object type identifier is globally unique (namespaced)
+	•	The owning service is explicit (core app service or plugin service)
+	•	The object is registered so other plugins can discover it (capability + contract registries)
+	•	Storage evolution follows the migration policy (diff, plan, prompt on destructive changes)
 
 ### Base Objects vs Value Structures (Referenceability)
 BVER distinguishes between:
@@ -250,6 +263,7 @@ These types describe capability intent, not implementation. One plugin can expos
 Notes:
 	•	Plugins can declare multiple types and share capability contracts
 	•	Type tags are used for discovery, governance, and UI grouping
+	•	Plugins may also ship base objects and kinds (object packs) to extend the platform vocabulary; these become referenceable once installed and registered
 
 Shim Packages (Hosted Capability Stubs)
 

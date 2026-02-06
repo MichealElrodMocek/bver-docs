@@ -74,23 +74,9 @@ References never cross service boundaries as objects. Only pointers cross bounda
 
 Engineering domain modeling should not be blocked by database mechanics.
 
-BVER is storage-agnostic by default:
-- Reference schemas are defined in the domain (not in hand-written SQL migrations)
-- The runtime persists references through a storage adapter (Postgres, SQLite, etc.)
-- Schema evolution is handled via generated migration plans
+BVER is storage-agnostic by default and supports automatic migration planning and prompted data-loss sweeps.
 
-Migration behavior (target design)
-- Additive changes (new optional fields) apply automatically.
-- Potentially destructive changes (renames, type changes, deletes) require an explicit prompt/ack.
-- Before applying destructive changes, Sandbox can run a "sweep" to surface what data would be lost.
-
-Destructive change safety options (evolves over time)
-- Drop after confirmation: remove the column/field only when the user accepts the loss.
-- Export: write an artifact snapshot (CSV/JSON) of the affected values before dropping.
-- Archive: move old values into a generic extension blob for later recovery.
-- Merge strategy: propose a mapping from old -> new fields when a rename/split/merge is intended.
-
-The guiding principle: if you wake up and decide a field is misleading, you change the domain object first; BVER helps you evolve storage safely and deliberately.
+Canonical policy: `BVER_MIGRATION_POLICY.md`
 
 ---
 

@@ -61,16 +61,11 @@ Sandbox prevents illegal cross-service coupling.
 Sandbox helps engineers evolve domain objects without hand-authoring database migrations.
 
 Sandbox supports:
-- Computing a schema diff between current domain definitions and persisted reference storage
-- Generating a migration plan (add, rename, change type, deprecate, drop)
+- Computing schema diffs and generating migration plans
 - Flagging potentially destructive changes and requiring explicit confirmation
-- "Sweeping" persisted state (prompted) to show what data would be lost before applying drops
+- Prompted "sweeps" to quantify/summarize potential data loss
 
-Safety behaviors (target design)
-- Additive changes apply automatically when safe.
-- Destructive changes require a prompt and can offer alternatives: export affected values to an artifact, archive values for later recovery, or propose merge/mapping strategies (rename/split/merge).
-
-The goal is simple: if you change a domain object, the system evolves with you, and you only think about data loss when it actually matters.
+Canonical policy: `BVER_MIGRATION_POLICY.md`
 
 ---
 

@@ -27,6 +27,7 @@ The core repo owns:
 Clarification: base objects vs value structures
 - Base objects are referenceable by default (identity + lifecycle; can be pointed to, versioned, audited).
 - Value structures are not referenceable by default (pure data like `EmailAddress`, `Money`, `GeoPoint`), and typically live inside base objects or appear only in request/response payloads.
+- Plugins may define additional base objects and kinds to add capability; the owning service and type identifiers must be explicit and globally unique (namespaced).
 
 Suggested name
 - bver-app-<product> (e.g., bver-app-substation)
